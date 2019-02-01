@@ -9,27 +9,26 @@ namespace LineGame {
 	/// </summary>
 	public class MainGame : Game {
 		GraphicsDeviceManager graphics;
-		SpriteBatch spriteBatch;
 
 		public MainGame() {
 			graphics = new GraphicsDeviceManager(this);
 			Content.RootDirectory = "Content";
 		}
 
-		/// <summary>
-		/// Allows the game to perform any initialization it needs to before starting to run.
-		/// This is where it can query for any required services and load any non-graphic
-		/// related content.  Calling base.Initialize will enumerate through any components
-		/// and initialize them as well.
-		/// </summary>
-		protected override void Initialize() {
+        /// <summary>
+        /// Allows the game to perform any initialization it needs to before starting to run.
+        /// This is where it can query for any required services and load any non-graphic
+        /// related content.  Calling base.Initialize will enumerate through any components
+        /// and initialize them as well.
+        /// </summary>
+        protected override void Initialize() {
 			graphics.PreferredBackBufferWidth = 1280;
 			graphics.PreferredBackBufferHeight = 720;
 			graphics.PreferMultiSampling = true;
 			graphics.ApplyChanges();
 			IsMouseVisible = true;
 
-			
+			var wallsBuilder = new WallsBuilder(this);
 
 			base.Initialize();
 		}
@@ -40,7 +39,6 @@ namespace LineGame {
 		/// </summary>
 		protected override void LoadContent() {
 			// Create a new SpriteBatch, which can be used to draw textures.
-			spriteBatch = new SpriteBatch(GraphicsDevice);
 
 			// TODO: use this.Content to load your game content here
 		}
@@ -62,7 +60,7 @@ namespace LineGame {
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
 			    || Keyboard.GetState().IsKeyDown(Keys.Escape))
 				Exit();
-
+			
 			// TODO: Add your update logic here
 
 			base.Update(gameTime);

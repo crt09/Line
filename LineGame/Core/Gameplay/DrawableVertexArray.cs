@@ -8,11 +8,10 @@ namespace LineGame.Core.Gameplay {
 	internal class DrawableVertexArray : DrawableGameComponent {
 
 		private readonly List<Point> points;
-
-		private SpriteBatch spriteBatch;
 		private Texture2D circleTexture;
 		private Texture2D lineTexture;
 
+		private SpriteBatch spriteBatch;
 		public DrawableVertexArray(Game game) : base(game) {
             Game.Components.Add(this);
 
@@ -69,9 +68,24 @@ namespace LineGame.Core.Gameplay {
         }
 
 		public void AddVertex(Point position) {
-			var lastPoint = points.Count != 0 ? points.Last() : Point.Zero;
-			if(lastPoint != position)
+			if (points.Count == 0 || points.Last() != position) {
 				points.Add(position);
+			}
 		}
-    }
+
+		public void RemoveVertexAt(int index) {
+			points.RemoveAt(index);
+		}
+
+		public void ClearAllVertices() {
+			points.Clear();
+		}
+
+		public int VerticesCount => points.Count;
+
+		public Point this[int index] {
+			get => points[index];
+			set => points[index] = value;
+		}
+	}
 }
