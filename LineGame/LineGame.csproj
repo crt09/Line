@@ -42,8 +42,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Core\Gameplay\DrawableVertexArray.cs" />
+    <Compile Include="Core\Gameplay\InputManager.cs" />
+    <Compile Include="Core\Gameplay\Player.cs" />
     <Compile Include="Core\Gameplay\Wall.cs" />
     <Compile Include="Core\Gameplay\WallsBuilder.cs" />
+    <Compile Include="Core\IObservable.cs" />
+    <Compile Include="Core\IObserver.cs" />
     <Compile Include="MainGame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -28,7 +28,9 @@ namespace LineGame {
 			graphics.ApplyChanges();
 			IsMouseVisible = true;
 
-			var wallsBuilder = new WallsBuilder(this);
+			var player = new Player(this);
+			var wallsBuilder = new WallsBuilder(this)
+				.AddPlayer(player);
 
 			base.Initialize();
 		}

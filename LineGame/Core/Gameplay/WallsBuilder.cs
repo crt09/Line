@@ -2,15 +2,30 @@
 
 namespace LineGame.Core.Gameplay {
 	public class WallsBuilder : GameComponent {
-		public WallsBuilder(Game game) : base(game) {
+
+		private readonly Wall topWall;
+		private readonly Wall bottomWall;
+		private Player player;
+
+        public WallsBuilder(Game game) : base(game) {
 			Game.Components.Add(this);
+
+			topWall = new Wall(Game, new Point(0, 200));
+			bottomWall = new Wall(Game, new Point(0, Game.Window.ClientBounds.Height - 200));
         }
 
-		public override void Initialize() {
-			var topWall = new Wall(Game, new Point(0, 200));
-			var bottomWall = new Wall(Game, new Point(0, Game.Window.ClientBounds.Height - 200));
+		public WallsBuilder AddPlayer(Player playerInstance) {
+			player = playerInstance;
+			player.AddObserver(topWall);
+			player.AddObserver(bottomWall);
+			return this;
+		}
 
-            base.Initialize();
+		public override void Update(GameTime gameTime) {
+			topWall.Moving = player?.Alive ?? true;
+			bottomWall.Moving = player?.Alive ?? true;
+
+			base.Update(gameTime);
 		}
 	}
 }

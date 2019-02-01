@@ -32,7 +32,6 @@ namespace LineGame.Core.Gameplay {
 
 		public override void Draw(GameTime gameTime) {
 			 spriteBatch.Begin();
-
 			 for (int i = 1; i < points.Count; i++) {
 				 spriteBatch.Draw(
 					 circleTexture,
@@ -45,7 +44,6 @@ namespace LineGame.Core.Gameplay {
 					 0);
 				 DrawLine(points[i], points[i - 1]);
             }
-
 			spriteBatch.End();
 			base.Draw(gameTime);
 		}

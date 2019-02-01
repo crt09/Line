@@ -1,13 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Troschuetz.Random.Generators;
-
+// ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable SuggestVarOrType_BuiltInTypes
+// ReSharper disable UseDeconstructionOnParameter
 
 namespace LineGame.Core.Gameplay {
-
-	public class Wall : GameComponent {
-
-		public bool Moving { get; set; } = true;
+	public class Wall : GameComponent, IObserver {
+	
+        public bool Moving { get; set; } = true;
 
 		private readonly DrawableVertexArray wall;
 		private readonly Point defaultStartPosition;
@@ -47,5 +47,30 @@ namespace LineGame.Core.Gameplay {
 
 			base.Update(gameTime);
 		}
-	}
+
+
+        public void Notify(IObservable sender) {
+	        if (!(sender is Player player) || !player.Alive) return;
+
+	        for (int i = 1; i < wall.VerticesCount; i++) {
+		        foreach (var line in player.IntersectionLines) {
+			        if (Intersects(line.PointA, line.PointB, wall[i], wall[i - 1]))
+						player.Alive = false;
+		        }		        
+	        }
+        }
+
+        private bool Intersects(Point a, Point b, Point c, Point d) {
+	        float denominator = ((b.X - a.X) * (d.Y - c.Y)) - ((b.Y - a.Y) * (d.X - c.X));
+	        float numeratorA = ((a.Y - c.Y) * (d.X - c.X)) - ((a.X - c.X) * (d.Y - c.Y));
+	        float numeratorB = ((a.Y - c.Y) * (b.X - a.X)) - ((a.X - c.X) * (b.Y - a.Y));
+
+            if (denominator == 0) return numeratorA == 0 && numeratorB == 0;
+
+	        float r = numeratorA / denominator;
+	        float s = numeratorB / denominator;
+
+	        return (r >= 0 && r <= 1) && (s >= 0 && s <= 1);
+        }
+    }
 }
