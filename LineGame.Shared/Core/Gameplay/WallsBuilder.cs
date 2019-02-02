@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LineGame.Core.UserInterface;
+using Microsoft.Xna.Framework;
 
 namespace LineGame.Core.Gameplay {
 	internal class WallsBuilder : GameComponent {
@@ -11,7 +12,7 @@ namespace LineGame.Core.Gameplay {
 			Game.Components.Add(this);
 
 			topWall = new Wall(Game, new Point(0, 150));
-			bottomWall = new Wall(Game, new Point(0, Game.Window.ClientBounds.Height - 150));
+			bottomWall = new Wall(Game, new Point(0, (int)Resolution.GameSize.Y - 150));
         }
 
 		public WallsBuilder AddPlayer(Player playerInstance) {

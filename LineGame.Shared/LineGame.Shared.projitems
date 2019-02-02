@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>268e089f-9c7d-484a-b29b-331ab1001116</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>LineGame.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Gameplay\DrawableVertexArray.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Gameplay\InputManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Gameplay\Player.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Gameplay\Wall.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\Gameplay\WallsBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\IObservable.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\IObserver.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\UserInterface\Resolution.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Core\UserInterface\UiManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MainGame.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <MonoGameContentReference Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Content\Content.mgcb" />
+  </ItemGroup>
+</Project>

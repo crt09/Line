@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using LineGame.Core.UserInterface;
+using Microsoft.Xna.Framework;
 using Troschuetz.Random.Generators;
 // ReSharper disable CompareOfFloatsByEqualityOperator
 // ReSharper disable SuggestVarOrType_BuiltInTypes
@@ -23,13 +24,13 @@ namespace LineGame.Core.Gameplay {
 		public void Reload() {
 			wall.ClearAllVertices();
 			wall.AddVertex(defaultStartPosition);
-			wall.AddVertex(new Point(Game.Window.ClientBounds.Width, defaultStartPosition.Y));
+			wall.AddVertex(new Point(Resolution.GameSize.X, defaultStartPosition.Y));
         }
 
         public override void Update(GameTime gameTime) {
 	        if (!Moving) return;
 			
-	        if (wall[wall.VerticesCount - 1].X < Game.Window.ClientBounds.Width) {
+	        if (wall[wall.VerticesCount - 1].X < Resolution.GameSize.X) {
 		        int randomWidth = new ALFGenerator().Next(50, 200);
 		        int randomYOffset = defaultStartPosition.Y + new ALFGenerator().Next(-150, 150);
                 wall.AddVertex(new Point(wall[wall.VerticesCount - 1].X + randomWidth, randomYOffset));

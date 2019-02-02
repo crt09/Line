@@ -19,13 +19,20 @@ namespace LineGame {
 		}
 
         protected override void Initialize() {
-			graphics.PreferredBackBufferWidth = 500;
+			graphics.PreferMultiSampling = true;		
+#if WINDOWS
+            graphics.PreferredBackBufferWidth = 500;
 			graphics.PreferredBackBufferHeight = 800;
-			graphics.PreferMultiSampling = true;
-			graphics.ApplyChanges();
+#elif ANDROID
+			graphics.IsFullScreen = true;
+#endif
+            graphics.ApplyChanges();
+	        Resolution.SetVirtualSize(new Vector2(500, 800));
+	        Resolution.SetActualSize(new Vector2(Window.ClientBounds.Width, Window.ClientBounds.Height));
+            Resolution.Apply();
 			IsMouseVisible = true;
 
-			player = new Player(this);
+            player = new Player(this);
 			walls = new WallsBuilder(this)
 				.AddPlayer(player);
             inputManager = new InputManager(this);
@@ -44,6 +51,8 @@ namespace LineGame {
 						Waiting = true;
 						walls.ReloadAll();
 						player.Reload();
+					} else {
+						player.Reverse();
 					}
 				}
 				uiManager.GameOverVisible = !player.Alive && !Waiting;

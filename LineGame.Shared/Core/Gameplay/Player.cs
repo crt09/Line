@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LineGame.Core.UserInterface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -30,7 +31,6 @@ namespace LineGame.Core.Gameplay {
         public bool Alive { get; set; }		
 
         private readonly DrawableVertexArray trail;
-		private readonly InputManager inputManager;
 
 		private SpriteBatch spriteBatch;
 		private Texture2D playerTexture;
@@ -46,7 +46,6 @@ namespace LineGame.Core.Gameplay {
         public Player(Game game) : base(game) {
 			Game.Components.Add(this);
 			observers = new List<IObserver>();
-			inputManager = new InputManager(Game);
 			trail = new DrawableVertexArray(Game);
 
             Reload();            
@@ -63,9 +62,6 @@ namespace LineGame.Core.Gameplay {
 			if (!Alive) return;
 
             // movement
-
-            if (inputManager.MainTouchHappened())
-	            accelerator = -accelerator;
 
             previousPlayerPosition = playerPosition;
 
@@ -105,8 +101,12 @@ namespace LineGame.Core.Gameplay {
 		}
 
         public override void Draw(GameTime gameTime) {
-			spriteBatch.Begin();
-			spriteBatch.Draw(
+#if ANDROID
+			spriteBatch.Begin(transformMatrix: Resolution.Scale);
+#else
+            spriteBatch.Begin();
+#endif
+            spriteBatch.Draw(
 				playerTexture,
 				new Rectangle((int)playerPosition.X, (int)playerPosition.Y, playerTexture.Width, playerTexture.Height),
 				null,
@@ -120,9 +120,13 @@ namespace LineGame.Core.Gameplay {
 			base.Draw(gameTime);
 		}
 
+        public void Reverse() {
+	        accelerator = -accelerator;
+        }
+
         public void Reload() {
-	        playerPosition.X = (float)Game.Window.ClientBounds.Width / 2;
-	        playerPosition.Y = (float)Game.Window.ClientBounds.Height / 2;
+	        playerPosition.X = (float)Resolution.GameSize.X / 2;
+	        playerPosition.Y = (float)Resolution.GameSize.Y / 2;
 
             trail.ClearAllVertices();
 	        trail.AddVertex(new Point(0, playerPosition.ToPoint().Y));

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LineGame.Core.UserInterface;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -31,8 +32,12 @@ namespace LineGame.Core.Gameplay {
 		}		
 
 		public override void Draw(GameTime gameTime) {
-			 spriteBatch.Begin();
-			 for (int i = 0; i < points.Count - 1; i++) {
+#if ANDROID
+			spriteBatch.Begin(transformMatrix: Resolution.Scale);
+#else
+            spriteBatch.Begin();
+#endif
+            for (int i = 0; i < points.Count - 1; i++) {
 				 spriteBatch.Draw(
 					 circleTexture,
 					 new Rectangle(points[i].X, points[i].Y, circleTexture.Width, circleTexture.Height),
