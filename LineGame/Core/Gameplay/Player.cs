@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -23,15 +22,12 @@ namespace LineGame.Core.Gameplay {
 		}
 
 		public struct Line {
-			public Point PointA;
-			public Point PointB;
-			public Line(Point pointA, Point pointB) {
-				PointA = pointA;
-				PointB = pointB;
-			}
-		} public Line IntersectionLine;
+			public Vector2 PointA;
+			public Vector2 PointB;
+		}
+		public Line IntersectionLine;
 
-        public bool Alive { get; set; } = true;
+        public bool Alive { get; set; }
 
 		private readonly DrawableVertexArray trail;
 		private readonly InputManager inputManager;
@@ -41,20 +37,16 @@ namespace LineGame.Core.Gameplay {
 		private Vector2 playerPosition;
 		private Vector2 previousPlayerPosition;
 
-        private float accelerator = 0.3f;
+        private float accelerator = -0.8f;
 		private float yVelocity;
 
 		public Player(Game game) : base(game) {
 			Game.Components.Add(this);
 			observers = new List<IObserver>();
 			inputManager = new InputManager();
+			trail = new DrawableVertexArray(Game);
 
-            playerPosition.X = 600;
-            playerPosition.Y = 360;
-
-            trail = new DrawableVertexArray(Game);
-			trail.AddVertex(new Point(0, (int)playerPosition.Y));
-			trail.AddVertex(playerPosition.ToPoint());
+            Reload();            
         }
 
 		protected override void LoadContent() {
@@ -74,19 +66,13 @@ namespace LineGame.Core.Gameplay {
 
             previousPlayerPosition = playerPosition;
 
-            yVelocity += accelerator;            
+            yVelocity += accelerator;       
             playerPosition.Y += yVelocity;
 
             // intersections
 
-            IntersectionLine.PointA = new Point((int)playerPosition.X, (int)playerPosition.Y - playerTexture.Height / 2);
-            IntersectionLine.PointB = new Point((int)playerPosition.X, (int)playerPosition.Y + playerTexture.Height / 2);
-
-            if (previousPlayerPosition.Y < IntersectionLine.PointA.Y)
-	            IntersectionLine.PointA = previousPlayerPosition.ToPoint();
-
-            if (previousPlayerPosition.Y > IntersectionLine.PointB.Y)
-	            IntersectionLine.PointB = previousPlayerPosition.ToPoint();
+            IntersectionLine.PointA = playerPosition;
+            IntersectionLine.PointB = new Vector2(playerPosition.X - 7, previousPlayerPosition.Y);
 
             NotifyAllObservers();
 
@@ -103,7 +89,7 @@ namespace LineGame.Core.Gameplay {
 
 			// move trail
 			for (int i = 0; i < trail.VerticesCount; i++) {
-				trail[i] += new Point(-5, 0);
+				trail[i] += new Point(-7, 0);
 			}
       			
             base.Update(gameTime);
@@ -117,12 +103,23 @@ namespace LineGame.Core.Gameplay {
 				null,
 				Color.White,
 				0f,
-				new Vector2(playerTexture.Width, (float)playerTexture.Height / 2), 
+				new Vector2(playerTexture.Width , (float)playerTexture.Height / 2), 
 				SpriteEffects.None,
 				0);
 			spriteBatch.End();
 
 			base.Draw(gameTime);
 		}
-	}
+
+        public void Reload() {
+	        playerPosition.X = (float)Game.Window.ClientBounds.Width / 2;
+	        playerPosition.Y = (float)Game.Window.ClientBounds.Height / 2;
+
+            trail.ClearAllVertices();
+	        trail.AddVertex(new Point(0, playerPosition.ToPoint().Y));
+	        trail.AddVertex(playerPosition.ToPoint());
+
+	        yVelocity = 0f;
+        }
+    }
 }

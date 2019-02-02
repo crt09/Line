@@ -10,8 +10,8 @@ namespace LineGame.Core.Gameplay {
         public WallsBuilder(Game game) : base(game) {
 			Game.Components.Add(this);
 
-			topWall = new Wall(Game, new Point(0, 200));
-			bottomWall = new Wall(Game, new Point(0, Game.Window.ClientBounds.Height - 200));
+			topWall = new Wall(Game, new Point(0, 150));
+			bottomWall = new Wall(Game, new Point(0, Game.Window.ClientBounds.Height - 150));
         }
 
 		public WallsBuilder AddPlayer(Player playerInstance) {
@@ -26,6 +26,11 @@ namespace LineGame.Core.Gameplay {
 			bottomWall.Moving = player?.Alive ?? true;
 
 			base.Update(gameTime);
+		}
+
+		public void ReloadAll() {
+			topWall.Reload();
+			bottomWall.Reload();
 		}
 	}
 }

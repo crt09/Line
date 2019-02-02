@@ -5,6 +5,7 @@ using Troschuetz.Random.Generators;
 // ReSharper disable UseDeconstructionOnParameter
 
 namespace LineGame.Core.Gameplay {
+
 	public class Wall : GameComponent, IObserver {
 	
         public bool Moving { get; set; } = true;
@@ -20,7 +21,7 @@ namespace LineGame.Core.Gameplay {
 			Reload();
 		}
 
-		private void Reload() {
+		public void Reload() {
 			wall.ClearAllVertices();
 			wall.AddVertex(defaultStartPosition);
 			wall.AddVertex(new Point(Game.Window.ClientBounds.Width, defaultStartPosition.Y));
@@ -30,8 +31,8 @@ namespace LineGame.Core.Gameplay {
 	        if (!Moving) return;
 			
 	        if (wall[wall.VerticesCount - 1].X < Game.Window.ClientBounds.Width) {
-		        int randomWidth = new ALFGenerator().Next(100, 400);
-		        int randomYOffset = defaultStartPosition.Y + new ALFGenerator().Next(-100, 100);
+		        int randomWidth = new ALFGenerator().Next(50, 200);
+		        int randomYOffset = defaultStartPosition.Y + new ALFGenerator().Next(-150, 150);
                 wall.AddVertex(new Point(wall[wall.VerticesCount - 1].X + randomWidth, randomYOffset));
 	        }
 
@@ -42,7 +43,7 @@ namespace LineGame.Core.Gameplay {
 	        }
 
 			for (int i = 0; i < wall.VerticesCount; ++i) {
-				wall[i] += new Point(-5, 0);
+				wall[i] += new Point(-7, 0);
 			}
 
 			base.Update(gameTime);
@@ -52,13 +53,14 @@ namespace LineGame.Core.Gameplay {
         public void Notify(IObservable sender) {
 	        if (!(sender is Player player) || !player.Alive) return;
 
-	        for (int i = 1; i < wall.VerticesCount; i++) {
-				if (Intersects(player.IntersectionLine.PointA, player.IntersectionLine.PointB, wall[i], wall[i - 1]))
+	        for (int i = 0; i < wall.VerticesCount - 1; i++) {
+				if (Intersects(player.IntersectionLine.PointA, player.IntersectionLine.PointB,
+					wall[i].ToVector2(), wall[i + 1].ToVector2()))
 					player.Alive = false;        
 	        }
         }
 
-        private bool Intersects(Point a, Point b, Point c, Point d) {
+        private bool Intersects(Vector2 a, Vector2 b, Vector2 c, Vector2 d) {
 	        float denominator = ((b.X - a.X) * (d.Y - c.Y)) - ((b.Y - a.Y) * (d.X - c.X));
 	        float numeratorA = ((a.Y - c.Y) * (d.X - c.X)) - ((a.X - c.X) * (d.Y - c.Y));
 	        float numeratorB = ((a.Y - c.Y) * (b.X - a.X)) - ((a.X - c.X) * (b.Y - a.Y));

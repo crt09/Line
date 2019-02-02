@@ -32,7 +32,7 @@ namespace LineGame.Core.Gameplay {
 
 		public override void Draw(GameTime gameTime) {
 			 spriteBatch.Begin();
-			 for (int i = 1; i < points.Count; i++) {
+			 for (int i = 0; i < points.Count - 1; i++) {
 				 spriteBatch.Draw(
 					 circleTexture,
 					 new Rectangle(points[i].X, points[i].Y, circleTexture.Width, circleTexture.Height),
@@ -42,7 +42,7 @@ namespace LineGame.Core.Gameplay {
 					 new Vector2((float)circleTexture.Width / 2, (float)circleTexture.Height / 2),
 					 SpriteEffects.None,
 					 0);
-				 DrawLine(points[i], points[i - 1]);
+				 DrawLine(points[i], points[i + 1]);
             }
 			spriteBatch.End();
 			base.Draw(gameTime);
