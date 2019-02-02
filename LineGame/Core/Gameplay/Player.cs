@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace LineGame.Core.Gameplay {
-	public class Player : DrawableGameComponent, IObservable {
+	internal class Player : DrawableGameComponent, IObservable {
 
 		private readonly List<IObserver> observers;
 
@@ -27,9 +27,9 @@ namespace LineGame.Core.Gameplay {
 		}
 		public Line IntersectionLine;
 
-        public bool Alive { get; set; }
+        public bool Alive { get; set; }		
 
-		private readonly DrawableVertexArray trail;
+        private readonly DrawableVertexArray trail;
 		private readonly InputManager inputManager;
 
 		private SpriteBatch spriteBatch;
@@ -40,10 +40,13 @@ namespace LineGame.Core.Gameplay {
         private float accelerator = -0.8f;
 		private float yVelocity;
 
-		public Player(Game game) : base(game) {
+		public int Distance { get; set; }
+		private int totalDistance;
+
+        public Player(Game game) : base(game) {
 			Game.Components.Add(this);
 			observers = new List<IObserver>();
-			inputManager = new InputManager();
+			inputManager = new InputManager(Game);
 			trail = new DrawableVertexArray(Game);
 
             Reload();            
@@ -66,8 +69,14 @@ namespace LineGame.Core.Gameplay {
 
             previousPlayerPosition = playerPosition;
 
-            yVelocity += accelerator;       
+            yVelocity += accelerator;
             playerPosition.Y += yVelocity;
+
+            totalDistance++;
+            if (totalDistance >= 100) {
+	            Distance++;
+	            totalDistance = 0;
+            }
 
             // intersections
 
@@ -91,7 +100,7 @@ namespace LineGame.Core.Gameplay {
 			for (int i = 0; i < trail.VerticesCount; i++) {
 				trail[i] += new Point(-7, 0);
 			}
-      			
+			
             base.Update(gameTime);
 		}
 
@@ -120,6 +129,8 @@ namespace LineGame.Core.Gameplay {
 	        trail.AddVertex(playerPosition.ToPoint());
 
 	        yVelocity = 0f;
+	        Distance = 0;
+	        totalDistance = 0;
         }
     }
 }

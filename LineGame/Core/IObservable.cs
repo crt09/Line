@@ -1,5 +1,5 @@
 ﻿namespace LineGame.Core {
-	public interface IObservable {
+	internal interface IObservable {
 		void AddObserver(IObserver observer);
 		void RemoveObserver(IObserver observer);
 		void NotifyAllObservers();

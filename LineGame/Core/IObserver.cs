@@ -1,5 +1,5 @@
 ﻿namespace LineGame.Core {
-	public interface IObserver {
+	internal interface IObserver {
 		void Notify(IObservable sender);
 	}
 }

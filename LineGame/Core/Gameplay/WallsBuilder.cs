@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 
 namespace LineGame.Core.Gameplay {
-	public class WallsBuilder : GameComponent {
+	internal class WallsBuilder : GameComponent {
 
 		private readonly Wall topWall;
 		private readonly Wall bottomWall;

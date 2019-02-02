@@ -5,8 +5,7 @@ using Troschuetz.Random.Generators;
 // ReSharper disable UseDeconstructionOnParameter
 
 namespace LineGame.Core.Gameplay {
-
-	public class Wall : GameComponent, IObserver {
+	internal class Wall : GameComponent, IObserver {
 	
         public bool Moving { get; set; } = true;
 

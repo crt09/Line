@@ -1,6 +1,6 @@
 ﻿using LineGame.Core.Gameplay;
+using LineGame.Core.UserInterface;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 
 namespace LineGame {
 	public class MainGame : Game {
@@ -11,6 +11,7 @@ namespace LineGame {
 		private Player player;
 		private WallsBuilder walls;
 		private InputManager inputManager;
+		private UiManager uiManager;
 
 		public MainGame() {
 			graphics = new GraphicsDeviceManager(this);
@@ -18,7 +19,7 @@ namespace LineGame {
 		}
 
         protected override void Initialize() {
-			graphics.PreferredBackBufferWidth = 720;
+			graphics.PreferredBackBufferWidth = 500;
 			graphics.PreferredBackBufferHeight = 800;
 			graphics.PreferMultiSampling = true;
 			graphics.ApplyChanges();
@@ -27,21 +28,26 @@ namespace LineGame {
 			player = new Player(this);
 			walls = new WallsBuilder(this)
 				.AddPlayer(player);
-			inputManager = new InputManager();
+            inputManager = new InputManager(this);
+			uiManager = new UiManager(this);
 
 			base.Initialize();
         }
 
 		protected override void Update(GameTime gameTime) {
-			if (inputManager.MainTouchHappened()) {
-				if (Waiting) {
-					player.Alive = true;
-					Waiting = false;
-				} else if (!player.Alive) {
-					Waiting = true;
-					walls.ReloadAll();
-					player.Reload();
+			if (player != null && walls != null) {
+				if (inputManager.MainTouchHappened()) {
+					if (Waiting) {
+						player.Alive = true;
+						Waiting = false;
+					} else if (!player.Alive) {
+						Waiting = true;
+						walls.ReloadAll();
+						player.Reload();
+					}
 				}
+				uiManager.GameOverVisible = !player.Alive && !Waiting;
+				uiManager.Distance = player.Distance;
 			}
 
 			base.Update(gameTime);
