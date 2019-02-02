@@ -53,10 +53,8 @@ namespace LineGame.Core.Gameplay {
 	        if (!(sender is Player player) || !player.Alive) return;
 
 	        for (int i = 1; i < wall.VerticesCount; i++) {
-		        foreach (var line in player.IntersectionLines) {
-			        if (Intersects(line.PointA, line.PointB, wall[i], wall[i - 1]))
-						player.Alive = false;
-		        }		        
+				if (Intersects(player.IntersectionLine.PointA, player.IntersectionLine.PointB, wall[i], wall[i - 1]))
+					player.Alive = false;        
 	        }
         }
 

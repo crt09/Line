@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -28,7 +29,7 @@ namespace LineGame.Core.Gameplay {
 				PointA = pointA;
 				PointB = pointB;
 			}
-		} public List<Line> IntersectionLines;
+		} public Line IntersectionLine;
 
         public bool Alive { get; set; } = true;
 
@@ -46,14 +47,10 @@ namespace LineGame.Core.Gameplay {
 		public Player(Game game) : base(game) {
 			Game.Components.Add(this);
 			observers = new List<IObserver>();
+			inputManager = new InputManager();
 
             playerPosition.X = 600;
             playerPosition.Y = 360;
-
-            IntersectionLines = new List<Line> {
-	            new Line(), new Line()
-            };
-			inputManager = new InputManager();
 
             trail = new DrawableVertexArray(Game);
 			trail.AddVertex(new Point(0, (int)playerPosition.Y));
@@ -80,12 +77,17 @@ namespace LineGame.Core.Gameplay {
             yVelocity += accelerator;            
             playerPosition.Y += yVelocity;
 
-	        // intersections
+            // intersections
 
-			IntersectionLines[0] = new Line(previousPlayerPosition.ToPoint(), playerPosition.ToPoint());
-			IntersectionLines[1] = new Line(
-				new Point((int)playerPosition.X, (int)playerPosition.Y - playerTexture.Height / 2),
-				new Point((int)playerPosition.X, (int)playerPosition.Y + playerTexture.Height / 2));
+            IntersectionLine.PointA = new Point((int)playerPosition.X, (int)playerPosition.Y - playerTexture.Height / 2);
+            IntersectionLine.PointB = new Point((int)playerPosition.X, (int)playerPosition.Y + playerTexture.Height / 2);
+
+            if (previousPlayerPosition.Y < IntersectionLine.PointA.Y)
+	            IntersectionLine.PointA = previousPlayerPosition.ToPoint();
+
+            if (previousPlayerPosition.Y > IntersectionLine.PointB.Y)
+	            IntersectionLine.PointB = previousPlayerPosition.ToPoint();
+
             NotifyAllObservers();
 
             // trail
