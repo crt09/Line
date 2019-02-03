@@ -12,7 +12,7 @@ namespace LineGame.Core.Gameplay {
 			Game.Components.Add(this);
 
 			topWall = new Wall(Game, new Point(0, 150));
-			bottomWall = new Wall(Game, new Point(0, (int)Resolution.GameSize.Y - 150));
+			bottomWall = new Wall(Game, new Point(0, Resolution.GameSize.Y - 150));
         }
 
 		public WallsBuilder AddPlayer(Player playerInstance) {
