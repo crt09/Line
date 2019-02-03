@@ -1,2 +1,2 @@
 # Line
-My own cross-platform implementation of the Line game from Google Play
+This is my implementation of one of the popular Android games. Hope you enjoy, it's pretty hard to play :]
